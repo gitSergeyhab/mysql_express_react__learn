@@ -1,9 +1,10 @@
+import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-import { Navbar, Container, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
 import { Context } from '../..';
 
 
-export const NavBarComponent = () => {
+export const NavBarComponent = observer (() => {
 
     const { user } = useContext(Context);
 
@@ -33,18 +34,17 @@ export const NavBarComponent = () => {
                     Link
                     </Nav.Link>
                 </Nav>
-                <Button>Authorization</Button>
-                {/* <Form className="d-flex">
-                    <FormControl
-                    type="search"
-                    placeholder="Search"
-                    className="me-2"
-                    aria-label="Search"
-                    />
-                    <Button variant="outline-success">Search</Button>
-                </Form> */}
+                {
+                    user.isAuth ? 
+                    <>
+                        <Button className='mx-2' onClick={() => user.setIsAuth(false)}>Logout</Button>
+                        <Button>Admin Panel</Button>
+                    </>
+                     :
+                    <Button onClick={() => user.setIsAuth(true)}>Login</Button>
+                }
                 </Navbar.Collapse>
             </Container>
         </Navbar>
     )
-}
+})
