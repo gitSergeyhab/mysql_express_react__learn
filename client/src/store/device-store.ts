@@ -28,8 +28,8 @@ export default class DeviceStore {
         this._brands = [
             { id: 1, name: 'Samsung' },
             { id: 2, name: 'Apple' },
-            { id: 1, name: 'Lenovo' },
-            { id: 2, name: 'Philips' },
+            { id: 3, name: 'Lenovo' },
+            { id: 4, name: 'Philips' },
         ];
 
         this._devices = [

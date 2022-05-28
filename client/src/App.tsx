@@ -24,8 +24,9 @@ const App = () => {
   const isAuth = true;
   return (
     <>
-      <NavBarComponent/>
       <BrowserRouter>
+        <NavBarComponent/>
+
         <Routes>
           <Route path={AppRoute.Shop} element={ <Shop/> }/>
           <Route path={AppRoute.Login} element={ <Auth/> }/>

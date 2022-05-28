@@ -1,17 +1,25 @@
 import { observer } from "mobx-react-lite";
 import { useContext } from "react";
+import { useNavigate } from 'react-router-dom'
 import { Card, Col, Image, Row } from "react-bootstrap";
 import { Context } from "../..";
 import { DeviceType } from "../../types/types";
-import src from '../../assets/star.svg'
+import src from '../../assets/star.svg';
 
 const DeviceItem = ({device} : {device: DeviceType}) => {
 
     const { id, img, name, price, rating } = device;
+    const navigate = useNavigate();
+
+    const handleCardClick = () => navigate(`/device/${id}`);
 
     return (
         <Col md={6} xs={12} xl={3}>
-            <Card style={{ width: 150, cursor: 'pointer' }} className="d-flex justify-content-center">
+            <Card 
+                style={{ width: 150, cursor: 'pointer' }}
+                className="d-flex justify-content-center mt-3"
+                onClick={handleCardClick}
+            >
                 <Image src={img} height={150} width={150}/>
                 <div className="d-flex justify-content-between align-items-center">
                     <div> { name } </div>

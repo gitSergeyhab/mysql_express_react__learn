@@ -1,14 +1,22 @@
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
 import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { Context } from '../..';
+import { AppRoute } from '../../App';
 
 
 export const NavBarComponent = observer (() => {
 
     const { user } = useContext(Context);
+    const navigate = useNavigate();
 
-    console.log(user);
+
+    const handleLogoutClick = () => {
+        user.setIsAuth(false);
+        navigate(AppRoute.Login);
+    }
+
     return (
         <Navbar bg="dark" variant='dark'  expand="lg">
             <Container fluid>
@@ -37,8 +45,8 @@ export const NavBarComponent = observer (() => {
                 {
                     user.isAuth ? 
                     <>
-                        <Button className='mx-2' onClick={() => user.setIsAuth(false)}>Logout</Button>
-                        <Button>Admin Panel</Button>
+                        <Button className='mx-2' onClick={handleLogoutClick}>Logout</Button>
+                        <Button onClick={() => navigate(AppRoute.Admin)}>Admin Panel</Button>
                     </>
                      :
                     <Button onClick={() => user.setIsAuth(true)}>Login</Button>
