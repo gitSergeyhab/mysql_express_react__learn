@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { ChangeEventHandler, useContext, useState } from "react";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import { Context } from "../..";
@@ -26,16 +26,37 @@ export type ModalProps = { show: boolean, onHide: () => void };
 
 export const DeviceModal = ({ show, onHide } : ModalProps ) => {
 
+  const [info, setInfo] = useState<any[]>([]);
+
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState<null | number>(null);
+  const [file, setFile] = useState<any>(null);
+  const [type, setType] = useState<any>(null);
+  const [brand, setBrand] = useState<any>(null);
+
+  
+
+  const handleNameChange: ChangeEventHandler<HTMLInputElement> = (evt) => setName(evt.currentTarget.value);
+  const handlePriceChange: ChangeEventHandler<HTMLInputElement> = (evt) => {
+    const value = evt.currentTarget.value
+    if (value) {
+      setPrice(+value);
+    } else {
+      setPrice(null);
+    }
+  } 
+
+  const handleFileChange = (evt: any)  => setFile(evt.target.files[0]);
+
+
   const { device } = useContext(Context);
 
-  const [info, setInfo] = useState<any[]>([]);
 
   const addInfo = () => setInfo([...info, { title: '', description: '', number: Date.now() }])
   const removeInfo = (number: number) => {
     const newInfo = info.filter((item) => item.number !== number);
     setInfo(newInfo)
   }
-
 
   const storeTypes: TypeType[] = device.types;
   const storeBrands: BrandType[] = device.brands;
@@ -68,9 +89,21 @@ export const DeviceModal = ({ show, onHide } : ModalProps ) => {
                 <Dropdown.Toggle className="my-1">Select Brand of device</Dropdown.Toggle>
                 <DropdownMenu> { dropdownBrands } </DropdownMenu>
               </Dropdown>
-              <Form.Control className="my-1" placeholder="enter a name of device"/>
-              <Form.Control className="my-1" type="number" placeholder="enter the price of device"/>
-              <Form.Control className="my-1" type="file"/>
+              <Form.Control 
+                className="my-1" placeholder="enter a name of device"
+                value={name}
+                onChange={handleNameChange}
+
+              />
+              <Form.Control 
+                className="my-1" type="number" placeholder="enter the price of device"
+                value={price ? price : ''}
+                onChange={handlePriceChange}
+              />
+              <Form.Control 
+                className="my-1" type="file"
+                onChange={handleFileChange}
+              />
               <hr/>
               <Button variant="outline-dark" onClick={addInfo}>Add a new property</Button>
               {infoItems}
