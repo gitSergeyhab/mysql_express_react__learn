@@ -12,7 +12,6 @@ export const BrandBar = observer(() => {
     const brands = storeBrands.map((item) => 
         <Card 
             
-            // active={ item.id === device._selectedBrand.id }
             key={ item.id }  
             className="my-1 "
             onClick={() => device.setSelectedBrand(item)}

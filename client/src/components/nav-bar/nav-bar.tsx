@@ -12,10 +12,13 @@ export const NavBarComponent = observer (() => {
     const navigate = useNavigate();
 
 
+    console.log(user)
     const handleLogoutClick = () => {
         user.setIsAuth(false);
-        navigate(AppRoute.Login);
+        user.setUser({});
     }
+
+    
 
     return (
         <Navbar bg="dark" variant='dark'  expand="lg">
@@ -49,7 +52,7 @@ export const NavBarComponent = observer (() => {
                         <Button onClick={() => navigate(AppRoute.Admin)}>Admin Panel</Button>
                     </>
                      :
-                    <Button onClick={() => user.setIsAuth(true)}>Login</Button>
+                    <Button onClick={() => navigate(AppRoute.Login)}>Login</Button>
                 }
                 </Navbar.Collapse>
             </Container>
