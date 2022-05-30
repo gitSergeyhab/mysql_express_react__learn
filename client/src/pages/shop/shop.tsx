@@ -1,14 +1,24 @@
-import { useContext } from "react"
+import { observer } from "mobx-react-lite"
+import { useContext, useEffect } from "react"
 import { Col, Container, Row } from "react-bootstrap"
 import { Context } from "../.."
 import { BrandBar } from "../../components/brand-bar/brand-bar"
 import { DeviceList } from "../../components/device-list/device-list"
 import { TypeBar } from "../../components/type-bar/type-bar"
+import { fetchBrands, fetchDevices, fetchTypes } from "../../http/device-api"
+import { TypeType } from "../../types/types"
 
-export const Shop = () => {
+export const Shop = observer (() => {
 
-    const { user } = useContext(Context);
-    console.log(user)
+    const { device } = useContext(Context);
+
+    useEffect(() => {
+        fetchTypes().then((data) => device.setTypes(data));
+        fetchBrands().then((data) => device.setBrands(data));
+        fetchDevices().then((data) => device.setDevices(data.rows));
+
+    }, [])
+    // const storeTypes: TypeType[] = device.types
 
     return (
         <Container> 
@@ -23,4 +33,4 @@ export const Shop = () => {
             </Row>
         </Container>
     )
-}
+})

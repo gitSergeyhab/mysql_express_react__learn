@@ -1,7 +1,12 @@
 import { Container, Row, Col, Image, Card, Button } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 import bigStar from '../../assets/big-star.png';
 
 export const DevicePage = () => {
+
+    const { id } = useParams()
+    console.log(id)
+
     const device =  { id: 1, name: 'Samsung 1', price: 11111, rating: 4, img: 'https://picsum.photos/id/237/200/300', info: [
         {id: 1, title: 'Samsung 1 title', description: 'Samsung 1 - description description'},
         {id: 2, title: ' 2 title', description: 'Samsung 2 - description description'},

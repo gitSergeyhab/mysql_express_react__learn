@@ -1,8 +1,22 @@
+import { ChangeEventHandler, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { createType } from "../../http/device-api";
 
 export type ModalProps = { show: boolean, onHide: () => void }
 
 export const TypeModal = ({ show, onHide } : ModalProps ) => {
+
+  const [name, setName] = useState('');
+
+  const handleAddType = () => {
+    createType({ name })
+      .then(() => {
+        setName('');
+        onHide();
+      })
+  }
+
+  const handleTypeChange: ChangeEventHandler<HTMLInputElement> = (evt) => setName(evt.currentTarget.value)
     return (
       <Modal
         show={show}
@@ -18,11 +32,15 @@ export const TypeModal = ({ show, onHide } : ModalProps ) => {
         </Modal.Header>
         <Modal.Body>
             <Form>
-                <Form.Control placeholder="Enter a new type"/>
+                <Form.Control 
+                  placeholder="Enter a new type"
+                  onChange={handleTypeChange}
+                  value={name}
+                />
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={onHide}>Add</Button>
+            <Button onClick={handleAddType}>Add</Button>
             <Button onClick={onHide}>Close</Button>
         </Modal.Footer>
       </Modal>

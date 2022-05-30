@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
 import { Navbar, Container, Nav, NavDropdown, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Context } from '../..';
 import { AppRoute } from '../../App';
 
@@ -23,7 +23,11 @@ export const NavBarComponent = observer (() => {
     return (
         <Navbar bg="dark" variant='dark'  expand="lg">
             <Container fluid>
-                <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
+                <Navbar.Brand>
+                    <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to={'/'}>
+                        Navbar scroll
+                    </Link>
+                </Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                 <Nav

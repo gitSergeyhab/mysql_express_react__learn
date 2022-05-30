@@ -20,7 +20,7 @@ const DeviceItem = ({device} : {device: DeviceType}) => {
                 className="d-flex justify-content-center mt-3"
                 onClick={handleCardClick}
             >
-                <Image src={img} height={150} width={150}/>
+                <Image src={ `${process.env.REACT_APP_API_URL}${img}` } height={150} width={150}/>
                 <div className="d-flex justify-content-between align-items-center">
                     <div> { name } </div>
                     <div> { rating } <Image src={src} width={12}/></div>

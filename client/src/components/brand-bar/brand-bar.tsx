@@ -7,7 +7,7 @@ import { BrandType } from "../../types/types";
 export const BrandBar = observer(() => {
 
     const { device } = useContext(Context);
-    const storeBrands: BrandType[] = device.types;
+    const storeBrands: BrandType[] = device.brands;
 
     const brands = storeBrands.map((item) => 
         <Card 
