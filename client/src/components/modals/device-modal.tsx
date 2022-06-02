@@ -1,19 +1,40 @@
+import { observer } from "mobx-react-lite";
 import { ChangeEventHandler, useContext, useState } from "react";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import { Context } from "../..";
 import { BrandType, TypeType } from "../../types/types";
 
+type InfoItemProps = {
+  changeInfo: (key: string, value: string, number: number) => void,
+  removeInfo : () => void, 
+  item: { title: string, description: string, number: number }
+}
+
+const InfoItem = ({removeInfo, changeInfo, item} : InfoItemProps) => {
+
+  const handleTitleChange: ChangeEventHandler<HTMLInputElement>  = (evt) => 
+    changeInfo('title', evt.currentTarget.value, item.number);
+
+  const handleDescriptionChange: ChangeEventHandler<HTMLInputElement>  = (evt) => 
+    changeInfo('description', evt.currentTarget.value, item.number);
 
 
-const InfoItem = ({removeInfo} : {removeInfo : () => void}) => {
   return (
     <Row>
       <Col md={4} className="my-1">
-        <Form.Control placeholder="enter property name"/>
+        <Form.Control
+          placeholder="enter property name" 
+          value={item.title}
+          onChange={handleTitleChange}
+         />
       </Col>
       <Col md={4} className="my-1">
-        <Form.Control placeholder="enter property description"/>
+        <Form.Control 
+          placeholder="enter property description" 
+          value={item.description}
+          onChange={handleDescriptionChange}
+        />
       </Col>
       <Col md={4} className="my-1">
         <Button variant="outline-danger" onClick={removeInfo}>Delete</Button>
@@ -24,7 +45,7 @@ const InfoItem = ({removeInfo} : {removeInfo : () => void}) => {
 
 export type ModalProps = { show: boolean, onHide: () => void };
 
-export const DeviceModal = ({ show, onHide } : ModalProps ) => {
+export const DeviceModal = observer (({ show, onHide } : ModalProps ) => {
 
   const [info, setInfo] = useState<any[]>([]);
 
@@ -58,12 +79,32 @@ export const DeviceModal = ({ show, onHide } : ModalProps ) => {
     setInfo(newInfo)
   }
 
+  const changeInfo = (key: string, value: string, number: number) => {
+    const newInfo = info.map((item) => item.number === number ? { ...item, [key]: value } : item)
+    setInfo(newInfo)
+  }
+
+  const handleAddDevice = () => {
+    console.log(info)
+  }
+
+
   const storeTypes: TypeType[] = device.types;
   const storeBrands: BrandType[] = device.brands;
 
-  const dropdownTypes = storeTypes.map((item) => <Dropdown.Item key={item.id}>{item.name}</Dropdown.Item>);
-  const dropdownBrands = storeBrands.map((item) => <Dropdown.Item key={item.id}>{item.name}</Dropdown.Item>);
-  const infoItems = info.map((item) => <InfoItem removeInfo={() => removeInfo(item.number)} key={item.number}/>)
+
+
+  const dropdownTypes = storeTypes.map((item) => 
+    <Dropdown.Item onClick={() => device.setSelectedType(item)} key={item.id}>
+      {item.name}
+    </Dropdown.Item>
+    );
+  const dropdownBrands = storeBrands.map((item) => 
+    <Dropdown.Item onClick={() => device.setSelectedBrand(item)} key={item.id}>
+      {item.name}
+    </Dropdown.Item>
+    );
+  const infoItems = info.map((item) => <InfoItem item={item} changeInfo={changeInfo} removeInfo={() => removeInfo(item.number)} key={item.number}/>)
 
 
     return (
@@ -82,11 +123,15 @@ export const DeviceModal = ({ show, onHide } : ModalProps ) => {
         <Modal.Body>
             <Form>
               <Dropdown>
-                <Dropdown.Toggle className="my-1">Select Type of device</Dropdown.Toggle>
+                <Dropdown.Toggle className="my-1">
+                  { device.selectedType.name || 'Select Type of device' }
+                </Dropdown.Toggle>
                 <DropdownMenu> { dropdownTypes } </DropdownMenu>
               </Dropdown>
               <Dropdown>
-                <Dropdown.Toggle className="my-1">Select Brand of device</Dropdown.Toggle>
+                <Dropdown.Toggle className="my-1">
+                  { device.selectedBrand.name || 'Select Brand of device' }
+                </Dropdown.Toggle>
                 <DropdownMenu> { dropdownBrands } </DropdownMenu>
               </Dropdown>
               <Form.Control 
@@ -111,9 +156,9 @@ export const DeviceModal = ({ show, onHide } : ModalProps ) => {
             </Form>
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={onHide}>Add Device</Button>
+            <Button onClick={handleAddDevice}>Add Device</Button>
             <Button onClick={onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
     );
-  }
+  })
