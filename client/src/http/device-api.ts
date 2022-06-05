@@ -24,17 +24,18 @@ export const fetchBrands = async() => {
 } 
 
 
-export const createDevice = async({ device } : { device: DeviceType }) => {
+export const createDevice = async({ device } : { device: DeviceType | FormData }) => {
     const { data } = await authHost.post('api/device', device);
     return data;
 } 
 
-export const fetchDevices = async() => {
-    const { data } = await host.get('api/device');
+type fetchDevicesParams = { typeId: number | null, brandId: number | null, page: number, limit: number};
+export const fetchDevices = async({ typeId, brandId, page, limit } : fetchDevicesParams) => {
+    const { data } = await host.get('api/device', { params: { typeId, brandId, page, limit } });
     return data;
 } 
 
-export const fetchOneDevices = async(id: string) => {
+export const fetchOneDevice = async(id: string) => {
     const { data } = await host.get(`api/device/${id}`);
     return data;
 } 

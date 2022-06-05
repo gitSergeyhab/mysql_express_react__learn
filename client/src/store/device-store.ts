@@ -12,6 +12,10 @@ export default class DeviceStore {
     _selectedType: TypeType | Object;
     _selectedBrand: BrandType | Object;
 
+    _page: number;
+    _totalCount: number;
+    _limit: number;
+
 
     constructor() {
         this._types = [];
@@ -20,18 +24,11 @@ export default class DeviceStore {
         this._selectedType = {};
         this._selectedBrand = {};
 
-        this._devices = [
-            // { id: 1, name: 'Samsung 1', price: 11111, rating: 4, img: 'https://picsum.photos/id/237/200/300' },
-            // { id: 2, name: 'Samsung 2', price: 22222, rating: 5, img: 'https://picsum.photos/id/237/200/300' },
-            // { id: 3, name: 'Samsung 3', price: 33333, rating: 3, img: 'https://picsum.photos/id/237/200/300' },
-            // { id: 4, name: 'Apple 1', price: 44444, rating: 4, img: 'https://picsum.photos/id/237/200/300' },
-            // { id: 5, name: 'Apple 11', price: 55555, rating: 5, img: 'https://picsum.photos/id/237/200/300' },
-            // { id: 6, name: 'Lenovo 1', price: 11111, rating: 4, img: 'https://picsum.photos/id/237/200/300' },
-            // { id: 7, name: 'Philips 1', price: 22222, rating: 5, img: 'https://picsum.photos/id/237/200/300' },
-            // { id: 8, name: 'Samsung 3', price: 33333, rating: 3, img: 'https://picsum.photos/id/237/200/300' },
-            // { id: 9, name: 'Apple 1', price: 44444, rating: 4, img: 'https://picsum.photos/id/237/200/300' },
-            // { id: 10, name: 'Apple 11', price: 55555, rating: 5, img: 'https://picsum.photos/id/237/200/300' },
-        ];
+        this._devices = [];
+
+        this._page = 1;
+        this._totalCount = 0;
+        this._limit = 3;
 
         makeAutoObservable(this);
     }
@@ -55,6 +52,19 @@ export default class DeviceStore {
         this._devices = devices;
     }
 
+    setPage(page: number) {
+        this._page = page;
+    }
+
+    setTotalCount(totalCount: number) {
+        this._totalCount = totalCount;
+    }
+
+    setLimit(limit: number) {
+        this._limit = limit;
+    }
+
+
     get types () {
         return this._types;
     }
@@ -73,5 +83,17 @@ export default class DeviceStore {
 
     get devices () {
         return this._devices;
+    }
+
+    get page () {
+        return this._page;
+    }
+
+    get totalCount () {
+        return this._totalCount;
+    }
+
+    get limit () {
+        return this._limit;
     }
 }

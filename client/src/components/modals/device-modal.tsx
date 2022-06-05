@@ -1,8 +1,9 @@
 import { observer } from "mobx-react-lite";
-import { ChangeEventHandler, useContext, useState } from "react";
+import { ChangeEventHandler, useContext, useEffect, useState } from "react";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import { Context } from "../..";
+import { createDevice, fetchBrands, fetchTypes } from "../../http/device-api";
 import { BrandType, TypeType } from "../../types/types";
 
 type InfoItemProps = {
@@ -52,9 +53,11 @@ export const DeviceModal = observer (({ show, onHide } : ModalProps ) => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState<null | number>(null);
   const [file, setFile] = useState<any>(null);
-  const [type, setType] = useState<any>(null);
-  const [brand, setBrand] = useState<any>(null);
 
+  useEffect(() => {
+    fetchTypes().then((data) => device.setTypes(data));
+    fetchBrands().then((data) => device.setBrands(data));
+  }, [])
   
 
   const handleNameChange: ChangeEventHandler<HTMLInputElement> = (evt) => setName(evt.currentTarget.value);
@@ -85,7 +88,15 @@ export const DeviceModal = observer (({ show, onHide } : ModalProps ) => {
   }
 
   const handleAddDevice = () => {
-    console.log(info)
+    // console.log(info);
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price', price ? `${price}` : '0');
+    formData.append('img', file);
+    formData.append('brandId', device.selectedBrand.id);
+    formData.append('typeId', device.selectedType.id);
+    formData.append('info', JSON.stringify(info));
+    createDevice({ device: formData }).then(onHide)
   }
 
 
